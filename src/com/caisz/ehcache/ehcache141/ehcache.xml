@@ -1,0 +1,96 @@
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="ehcache.xsd">
+
+    <!--
+    CacheManager Configuration
+    ==========================
+    An ehcache.xml corresponds to a single CacheManager.
+    
+    See instructions below or the ehcache schema (ehcache.xsd) on how to configure.
+
+    DiskStore configuration
+    =======================
+
+    Sets the path to the directory where cache files are created.
+
+    If the path is a Java System Property it is replaced by its value in the
+    running VM.
+
+    The following properties are translated:
+    * user.home - User's home directory
+    * user.dir - User's current working directory
+    * java.io.tmpdir - Default temp file path
+    
+    java.io.tmpdir
+
+    Subdirectories can be specified below the property e.g. java.io.tmpdir/one
+    -->
+    
+    
+    <diskStore path="java.io.tmpdir/ehcache"/>
+
+
+
+    <!--
+    Mandatory Default Cache configuration. These settings will be applied to caches
+    created programmtically using CacheManager.add(String cacheName).
+
+    The defaultCache has an implicit name "default" which is a reserved cache name.
+    -->
+    <defaultCache
+            maxElementsInMemory="10"
+            eternal="false"
+            timeToIdleSeconds="120"
+            timeToLiveSeconds="120"
+            overflowToDisk="true"
+            diskSpoolBufferSizeMB="30"
+            maxElementsOnDisk="10"
+            diskPersistent="true"
+            diskExpiryThreadIntervalSeconds="120"
+            memoryStoreEvictionPolicy="LRU"
+            />
+
+
+    <!--
+    Sample cache named sampleCache3. This cache overflows to disk. The disk store is
+    persistent between cache and VM restarts. The disk expiry thread interval is set to 10
+    minutes, overriding the default of 2 minutes.
+    
+name : the name of the cache. Note that "default" is a reserved name for the defaultCache.
+maxElementsInMemory : the maximum number of elements in memory, before they are evicted
+memoryStoreEvictionPolicy :  one of LRU, LFU and FIFO. Optionally null, in which case it will be set to LRU.
+overflowToDisk :  whether to use the disk store
+diskStorePath :  this parameter is ignored. CacheManager sets it using setter injection.
+eternal :  whether the elements in the cache are eternal, i.e. never expire
+timeToLiveSeconds :  the default amount of time to live for an element from its creation date
+timeToIdleSeconds :  the default amount of time to live for an element from its last accessed or modified date
+diskPersistent :  whether to persist the cache to disk between JVM restarts
+diskExpiryThreadIntervalSeconds :  how often to run the disk store expiry thread. A large number of 120 seconds plus is recommended
+registeredEventListeners :  a notification service. Optionally null, in which case a new one with no registered listeners will be created.
+    
+    
+    -->
+    <cache name="IR"
+           maxElementsInMemory="1400"
+           eternal="false"
+           timeToIdleSeconds="2"
+           timeToLiveSeconds="48"
+           memoryStoreEvictionPolicy="LFU"
+            >
+            <cacheEventListenerFactory class="com.caisz.ehcache.ehcache141.cacheeventlistenerfactory.IRCacheListenerFactory"/>
+     </cache>
+
+
+<!-- 
+    <cache name="IRRecycleBin"
+           maxElementsInMemory="5"
+           eternal="false"
+           timeToIdleSeconds="30"
+           timeToLiveSeconds="60"
+           memoryStoreEvictionPolicy="FIFO"
+            >
+            <cacheEventListenerFactory class="com.messagesolution.search.core.abs.IRRecycleBinCacheListenerFactory"/>
+     </cache>
+ -->
+
+
+</ehcache>
